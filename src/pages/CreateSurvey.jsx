@@ -5,27 +5,47 @@ import { FaGripVertical } from "react-icons/fa";
 const CreateSurvey = () => {
   const [questions, setQuestions] = useState([]);
 
+  const [surveyTitle, setSurveyTitle] = useState("");
+  const [surveyDescription, setSurveyDescription] = useState("");
+  const [questionText, setQuestionText] = useState("");
+  const [questionType, setQuestionType] = useState("");
+
   const addQuestion = () => {
-    // Placeholder function to add a question
+    const newQuestion = { text: questionText, type: questionType };
+    setQuestions([...questions, newQuestion]);
+    setQuestionText("");
+    setQuestionType("");
   };
 
   const reorderQuestions = (sourceIndex, destinationIndex) => {
-    // Placeholder function to reorder questions
+    if (destinationIndex < 0 || destinationIndex >= questions.length) return; // Prevents out-of-bounds reordering
+    const newQuestions = Array.from(questions);
+    const [removed] = newQuestions.splice(sourceIndex, 1);
+    newQuestions.splice(destinationIndex, 0, removed);
+    setQuestions(newQuestions);
   };
 
+  const handleSurveyTitleChange = (e) => setSurveyTitle(e.target.value);
+  const handleSurveyDescriptionChange = (e) => setSurveyDescription(e.target.value);
+  const handleQuestionTextChange = (e) => setQuestionText(e.target.value);
+  const handleQuestionTypeChange = (e) => setQuestionType(e.target.value);
+
   return (
-    <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch" m={4}>
+    <VStack divider={<StackDivider borderColor="gray.200" />} spacing={4} align="stretch" m={4} id="create-survey-form">
+      <Button colorScheme="purple" onClick={() => navigate("/preview-survey", { state: { surveyTitle, surveyDescription, questions } })}>
+        Preview Survey
+      </Button>
       <Heading>Create Survey</Heading>
       {/* Survey configuration form */}
       <Box p={5} shadow="md" borderWidth="1px">
         <Heading fontSize="xl">Survey Configuration</Heading>
         <FormControl id="survey-title" isRequired mt={4}>
           <FormLabel>Survey Title</FormLabel>
-          <Input placeholder="Enter survey title..." />
+          <Input placeholder="Enter survey title..." value={surveyTitle} onChange={handleSurveyTitleChange} />
         </FormControl>
         <FormControl id="survey-description" mt={4}>
           <FormLabel>Survey Description</FormLabel>
-          <Input placeholder="Enter survey description..." />
+          <Input placeholder="Enter survey description..." value={surveyDescription} onChange={handleSurveyDescriptionChange} />
         </FormControl>
         <Button mt={4} colorScheme="blue">
           Save Configuration
@@ -36,11 +56,11 @@ const CreateSurvey = () => {
         <Heading fontSize="xl">Add Question</Heading>
         <FormControl id="question-text" isRequired mt={4}>
           <FormLabel>Question Text</FormLabel>
-          <Input placeholder="Enter question text..." />
+          <Input placeholder="Enter question text..." value={questionText} onChange={handleQuestionTextChange} />
         </FormControl>
         <FormControl id="question-type" isRequired mt={4}>
           <FormLabel>Question Type</FormLabel>
-          <Select placeholder="Select question type">
+          <Select placeholder="Select question type" value={questionType} onChange={handleQuestionTypeChange}>
             <option value="text">Text</option>
             <option value="multiple-choice">Multiple Choice</option>
             <option value="checkbox">Checkbox</option>
