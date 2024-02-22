@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Button, Container, Heading, Input, List, ListItem, Stack, useToast, IconButton, Text, VStack, HStack } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
+import { Box, Button, Container, Heading, Input, List, ListItem, useToast, IconButton, Text, VStack, HStack } from "@chakra-ui/react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
 const Index = () => {
@@ -34,7 +35,10 @@ const Index = () => {
   return (
     <Container maxW="container.md" py={8}>
       <VStack spacing={6}>
-        <Heading>Create and Manage Surveys</Heading>
+        <Heading as="h1">Create and Manage Surveys</Heading>
+        <NavLink to="/create-survey">
+          <Button colorScheme="blue">Create New Survey</Button>
+        </NavLink>
         <HStack width="100%">
           <Input placeholder="Enter survey title..." value={newSurveyTitle} onChange={handleNewSurveyChange} />
           <IconButton colorScheme="blue" aria-label="Add survey" icon={<FaPlus />} onClick={handleCreateSurvey} />
